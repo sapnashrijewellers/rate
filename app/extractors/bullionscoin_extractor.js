@@ -1,4 +1,4 @@
-import { extractByClass } from '../utils/htmlScraper.js';
+import { extractByClass } from './utils/htmlScraper.js';
 export const RateConfigKey="bullions_co_in";
 export async function extract() {
     

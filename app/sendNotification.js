@@ -1,6 +1,4 @@
 import webpush from 'web-push';
-import { readFileSync } from 'fs';
-
 // 1. Generate your VAPID keys once (can reuse)
 const vapidKeys = {
   publicKey:
@@ -55,7 +53,7 @@ async function sendAll(webpush, payload) {
 }
 
 async function getNotificationMessage() {
-  const response = await fetch('https://sapnashrijewellers.github.io/static/rates.json');
+  const response = await fetch('https://sapnashrijewellers.github.io/rate/rates.json');
   const data = await response.json();
 
   const body =
