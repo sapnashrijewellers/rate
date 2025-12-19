@@ -45,7 +45,7 @@ export async function extract(rateConfig) {
 
 function parseGold(inputData, rateConfig) {
 
-    let price = getValue(inputData, 2730, 3);
+    let price = getValue(inputData, 2617, 3);
     return (price) / 10;
 }
 
