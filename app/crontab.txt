@@ -1,7 +1,8 @@
-# update rates every 5 minutes
-*/5 * * * * root /app/update-rates.sh >> /var/log/rates.log 2>&1
+# Update rates every hour between 9 AM and 8 PM (runs at HH:00)
+0 9-20 * * * root /app/update-rates.sh >> /var/log/rates.log 2>&1
 
-# Run notification sender every hour between 9 AM and 7 PM
-0 9-19 * * * root /app/send-rate-notification.sh >> /var/log/notification.log 2>&1
+# Send notifications every hour between 9 AM and 8 PM,
+# runs 1 minute after rate update to ensure fresh data
+1 9-20 * * * root /app/send-rate-notification.sh >> /var/log/notification.log 2>&1
 
 # Important: empty line at end of file required by cron
