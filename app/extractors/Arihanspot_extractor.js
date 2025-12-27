@@ -1,4 +1,4 @@
-export const RateConfigKey="arihant_spot";
+export const RateConfigKey = "arihant_spot";
 async function fetchRate(url) {
     const res = await fetch(url,
         {
@@ -32,24 +32,24 @@ export async function extract(rateConfig) {
     ]);
 
     // 2. CPU Time Optimization: Pre-process the data *once* before parsing.
-    const goldDataMap = preProcessData(goldDataText);
+    const goldDataMap = preProcessData1(goldDataText);
     const silverDataMap = preProcessData(silverDataText);
 
     // 3. Parsing: Use the efficient Maps for lookups.
-    const goldRate = parseGold(goldDataMap, rateConfig);
-    const silverRate = parseSilver(silverDataMap, rateConfig);
+    const goldRate = parseGold(goldDataMap);
+    const silverRate = parseSilver(silverDataMap);
 
     // The original `|| 0` logic in fetchRate is now handled by `getValue` returning 0.
     return [goldRate, silverRate];
 }
 
-function parseGold(inputData, rateConfig) {
+function parseGold(inputData) {
 
-    let price = getValue(inputData, 2617, 3);
+    let price = getValue1(inputData);
     return (price) / 10;
 }
 
-function parseSilver(inputData, rateConfig) {
+function parseSilver(inputData) {
     let price = getValue(inputData, 2719, 3);
     if (price <= 0) {
         price = getValue(inputData, 2591, 3);
@@ -91,4 +91,44 @@ function preProcessData(textData) {
         }
     }
     return dataMap;
+}
+
+function getValue1(dataList) {
+
+    const searchTerms = ["999", "bis", "with gst"];
+
+    const value = dataList.find(g => {
+        const nameLower = g.name.toLowerCase();
+        // Check if every term is present in the lowercase name
+        return searchTerms.every(term => nameLower.includes(term.toLowerCase()));
+    });
+    console.log(value);
+    const value1 = parseFloat(value.sell);
+    // Return 0 if NaN, as per original logic, otherwise the number
+    return isNaN(value1) ? 0 : value1;
+
+}
+
+function preProcessData1(textData) {
+    const dataList = [];
+
+    // 2. Split by newline and remove empty lines
+    const lines = textData.trim().split("\n").filter(line => line.trim().length > 0);
+
+    for (const line of lines) {
+        // 3. Trim the line first, then split by tabs or multiple spaces
+        const cells = line.trim().split(/\t+/);
+
+        if (cells.length >= 6) {
+            dataList.push({
+                rowId: cells[0],
+                name: cells[1],
+                low: cells[5],
+                high: cells[4],
+                buy: cells[2],
+                sell: cells[3]
+            });
+        }
+    }
+    return dataList;
 }
