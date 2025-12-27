@@ -101,8 +101,7 @@ function getValue1(dataList) {
         const nameLower = g.name.toLowerCase();
         // Check if every term is present in the lowercase name
         return searchTerms.every(term => nameLower.includes(term.toLowerCase()));
-    });
-    console.log(value);
+    });    
     const value1 = parseFloat(value.sell);
     // Return 0 if NaN, as per original logic, otherwise the number
     return isNaN(value1) ? 0 : value1;
