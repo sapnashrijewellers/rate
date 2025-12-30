@@ -94,18 +94,33 @@ function preProcessData(textData) {
 }
 
 function getValue1(dataList) {
+    // 1. Declare with 'let' so it can be updated
+    let value;
 
-    const searchTerms = ["999", "bis", "with gst"];
-
-    const value = dataList.find(g => {
+    // First attempt: 999
+    const terms999 = ["999", "bis", "with", "gst"];
+    value = dataList.find(g => {
         const nameLower = g.name.toLowerCase();
-        // Check if every term is present in the lowercase name
-        return searchTerms.every(term => nameLower.includes(term.toLowerCase()));
-    });    
-    const value1 = parseFloat(value.sell);
-    // Return 0 if NaN, as per original logic, otherwise the number
-    return isNaN(value1) ? 0 : value1;
+        return terms999.every(term => nameLower.includes(term.toLowerCase()));
+    });
 
+    // 2. If not found, look for 995
+    if (!value) {
+        const terms995 = ["995", "bis", "with", "gst"];
+        
+        // Removed the 'const' here so it updates the outer 'value'
+        value = dataList.find(g => {
+            if (!g.name) return false;
+            const nameLower = g.name.toLowerCase();
+            return terms995.every(term => nameLower.includes(term.toLowerCase().trim()));
+        });
+    }
+
+    // 3. Safety Check: If both searches failed, return 0
+    if (!value) return 0;
+
+    const sellValue = parseFloat(value.sell);
+    return isNaN(sellValue) ? 0 : sellValue;
 }
 
 function preProcessData1(textData) {
