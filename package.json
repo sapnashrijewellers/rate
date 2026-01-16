@@ -7,7 +7,7 @@
   },
   "scripts": {
     "generate:rates": "node rates.js",
-    "publish:rates": "npm run generate:rates && mkdir -p tmp-rates && mv rates.json tmp-rates/rates.json && gh-pages -d tmp-rates -b gh-data -m \"Update rates.json \" --repo \"https://${GITHUB_TOKEN}@github.com/sapnashrijewellers/rate.git\" && rm -rf tmp-rates",
+    "publish:rates": "npm run generate:rates && rm -rf node_modules/.cache/gh-pages && mkdir -p tmp-rates && cp rates.json tmp-rates/rates.json && gh-pages -d tmp-rates -b gh-data -m \"Update rates.json\" --repo \"https://${GITHUB_TOKEN}@github.com/sapnashrijewellers/rate.git\" && rm -rf tmp-rates",
     "rates:notification": "node sendNotification.js"
   }
 }
