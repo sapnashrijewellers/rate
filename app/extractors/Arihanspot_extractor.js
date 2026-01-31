@@ -52,7 +52,7 @@ function parseGold(inputData) {
 function parseSilver(inputData) {
     let price = getValue(inputData, 2719, 3);
     if (price <= 0) {
-        price = getValue(inputData, 2591, 3);
+        price = getValue(inputData, `2591`, 3);
     }
     return price / 1000;
 }
@@ -98,7 +98,7 @@ function getValue1(dataList) {
     let value;
 
     // First attempt: 999
-    const terms999 = ["999", "bis", "with", "gst"];
+    const terms999 = ["999", "gst"];
     value = dataList.find(g => {
         const nameLower = g.name.toLowerCase();
         return terms999.every(term => nameLower.includes(term.toLowerCase()));
@@ -106,7 +106,7 @@ function getValue1(dataList) {
 
     // 2. If not found, look for 995
     if (!value) {
-        const terms995 = ["995", "bis", "with", "gst"];
+        const terms995 = ["995", "gst"];
         
         // Removed the 'const' here so it updates the outer 'value'
         value = dataList.find(g => {
